@@ -42,7 +42,7 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
         			case *net.IPAddr:
                 		ip = v.IP
 	        		}
-    	    		fmt.Fprint(w, "%s\n", ip)
+    	    		fmt.Fprint(w, "ip: %s\n", ip)
 				}
     		}
 		}
