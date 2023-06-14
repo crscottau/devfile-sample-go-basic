@@ -19,8 +19,24 @@ func main() {
 func HelloServer(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path[1:]
 	if path != "" {
-		fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+		fmt.Fprintf(w, "Hello, %s!\n", r.URL.Path[1:])
 	} else {
-		fmt.Fprint(w, "Hello World!")
+		fmt.Fprint(w, "Hello World!\n")
+	}
+	fmt.Fprint(w, "IP Addresses:\n")
+	ifaces, err := net.Interfaces()
+	for _, i := range ifaces {
+    		addrs, err := i.Addrs()
+    		// handle err
+    		for _, addr := range addrs {
+        		var ip net.IP
+        		switch v := addr.(type) {
+        		case *net.IPNet:
+                		ip = v.IP
+        		case *net.IPAddr:
+                		ip = v.IP
+        		}
+        		fmt.Fprint(w, "%s\n", ip)
+    		}
 	}
 }
