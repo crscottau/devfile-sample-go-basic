@@ -24,15 +24,15 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprint(w, "Hello World!\n")
 	}
-	fmt.Fprint(w, "IP Addresses:\n")
+	fmt.Fprint(w, "\nMy container IP Addresses:\n")
 	ifaces, err := net.Interfaces()
 	if err != nil {
-		fmt.Fprint(w, "ERROR: %s\n", err)
+		fmt.Fprint(w, "\tERROR: %s\n", err)
 	} else {
 		for _, i := range ifaces {
     		addrs, err := i.Addrs()
 			if err != nil {
-				fmt.Fprint(w, "ERROR: %s\n", err)
+				fmt.Fprint(w, "\tERROR: %s\n", err)
 			} else {
     			for _, addr := range addrs {
 	        		var ip net.IP
@@ -42,7 +42,7 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
         			case *net.IPAddr:
                 		ip = v.IP
 	        		}
-    	    		fmt.Fprint(w, "ip: %s\n", ip)
+    	    		fmt.Fprint(w, "\t", ip, "\n")
 				}
     		}
 		}
