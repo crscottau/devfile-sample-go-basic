@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 )
 
@@ -25,18 +26,25 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprint(w, "IP Addresses:\n")
 	ifaces, err := net.Interfaces()
-	for _, i := range ifaces {
+	if err != nil {
+		fmt.Fprint(w, "ERROR: %s\n", err)
+	} else {
+		for _, i := range ifaces {
     		addrs, err := i.Addrs()
-    		// handle err
-    		for _, addr := range addrs {
-        		var ip net.IP
-        		switch v := addr.(type) {
-        		case *net.IPNet:
+			if err != nil {
+				fmt.Fprint(w, "ERROR: %s\n", err)
+			} else {
+    			for _, addr := range addrs {
+	        		var ip net.IP
+    	    		switch v := addr.(type) {
+        			case *net.IPNet:
+            	    	ip = v.IP
+        			case *net.IPAddr:
                 		ip = v.IP
-        		case *net.IPAddr:
-                		ip = v.IP
-        		}
-        		fmt.Fprint(w, "%s\n", ip)
+	        		}
+    	    		fmt.Fprint(w, "%s\n", ip)
+				}
     		}
+		}
 	}
 }
